@@ -1,0 +1,1073 @@
+#ini merupakan record konfigurasi cisco packet tracert saya
+#konfigurasi ini sudah sesuai/urut dengan langkah-langkah yang ada pada file Rakha Febryza R.pkt
+
+########################################################################################################################################
+
+#Konfigurasi VLAN
+Switch>en
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#hostname CoreSw1
+CoreSw1(config)#vlan10
+                    ^
+% Invalid input detected at '^' marker.
+	
+CoreSw1(config)#vlan 10
+CoreSw1(config-vlan)#name Sevima's server
+                                   ^
+% Invalid input detected at '^' marker.
+	
+CoreSw1(config-vlan)#name Sevimaserver
+CoreSw1(config-vlan)#exit
+CoreSw1(config)#vlan 20
+CoreSw1(config-vlan)#name IT
+CoreSw1(config-vlan)#exit
+CoreSw1(config)#vlan 30
+CoreSw1(config-vlan)#name HR
+CoreSw1(config-vlan)#exit
+CoreSw1(config)#vlan 40
+CoreSw1(config-vlan)#name pemasaran
+CoreSw1(config-vlan)#exit
+CoreSw1(config)#exit
+CoreSw1#
+%SYS-5-CONFIG_I: Configured from console by console
+
+CoreSw1#show vlan
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa0/1, Fa0/2, Fa0/3, Fa0/4
+                                                Fa0/5, Fa0/6, Fa0/7, Fa0/8
+                                                Fa0/9, Fa0/10, Fa0/11, Fa0/12
+                                                Fa0/13, Fa0/14, Fa0/15, Fa0/16
+                                                Fa0/17, Fa0/18, Fa0/19, Fa0/20
+                                                Fa0/21, Fa0/22, Fa0/23, Fa0/24
+                                                Gig0/1, Gig0/2
+10   Sevimaserver                     active    
+20   IT                               active    
+30   HR                               active    
+40   pemasaran                        active    
+1002 fddi-default                     active    
+1003 token-ring-default               active    
+1004 fddinet-default                  active    
+1005 trnet-default                    active    
+
+VLAN Type  SAID       MTU   Parent RingNo BridgeNo Stp  BrdgMode Trans1 Trans2
+---- ----- ---------- ----- ------ ------ -------- ---- -------- ------ ------
+1    enet  100001     1500  -      -      -        -    -        0      0
+
+
+
+
+
+
+
+
+
+
+#Konfigurasi VTP SERVER dan Trunk Port
+CoreSw1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+CoreSw1(config)#int range f0/21-24
+CoreSw1(config-if-range)#switch
+CoreSw1(config-if-range)#switchport tr
+CoreSw1(config-if-range)#switchport trunk en
+CoreSw1(config-if-range)#switchport trunk encapsulation do
+CoreSw1(config-if-range)#switchport trunk encapsulation dot1q 
+CoreSw1(config-if-range)#swi
+CoreSw1(config-if-range)#switchport mo
+CoreSw1(config-if-range)#switchport mode tr
+CoreSw1(config-if-range)#switchport mode trunk 
+
+
+CoreSw1(config-if-range)#exit
+CoreSw1(config)#int range f0/1-4
+CoreSw1(config-if-range)#sw
+CoreSw1(config-if-range)#switchport tr
+CoreSw1(config-if-range)#switchport trunk e
+CoreSw1(config-if-range)#switchport trunk encapsulation d
+CoreSw1(config-if-range)#switchport trunk encapsulation dot1q 
+CoreSw1(config-if-range)#siw
+CoreSw1(config-if-range)#s
+CoreSw1(config-if-range)#sw
+CoreSw1(config-if-range)#switchport mod
+CoreSw1(config-if-range)#switchport mode tr
+CoreSw1(config-if-range)#switchport mode trunk 
+
+
+CoreSw1#show interfaces trunk 
+Port        Mode         Encapsulation  Status        Native vlan
+Fa0/1       on           802.1q         trunking      1
+Fa0/2       on           802.1q         trunking      1
+Fa0/3       on           802.1q         trunking      1
+Fa0/4       on           802.1q         trunking      1
+Fa0/21      on           802.1q         trunking      1
+Fa0/22      on           802.1q         trunking      1
+Fa0/23      on           802.1q         trunking      1
+Fa0/24      on           802.1q         trunking      1
+
+Port        Vlans allowed on trunk
+Fa0/1       1-1005
+Fa0/2       1-1005
+Fa0/3       1-1005
+Fa0/4       1-1005
+Fa0/21      1-1005
+Fa0/22      1-1005
+Fa0/23      1-1005
+Fa0/24      1-1005
+
+
+CoreSw2#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+CoreSw2(config)#int range
+CoreSw2(config)#int range f0/21-24
+CoreSw2(config-if-range)#swi
+CoreSw2(config-if-range)#switchport tr
+CoreSw2(config-if-range)#switchport trunk en
+CoreSw2(config-if-range)#switchport trunk encapsulation d
+CoreSw2(config-if-range)#switchport trunk encapsulation dot1q 
+CoreSw2(config-if-range)#swi
+CoreSw2(config-if-range)#switchport mod
+CoreSw2(config-if-range)#switchport mode tr
+CoreSw2(config-if-range)#switchport mode trunk 
+CoreSw2(config-if-range)#exit
+CoreSw2(config)#int f0/2-5
+                       ^
+% Invalid input detected at '^' marker.
+	
+CoreSw2(config)#int range f0/2-5
+CoreSw2(config-if-range)#swi
+CoreSw2(config-if-range)#switchport tr
+CoreSw2(config-if-range)#switchport trunk en
+CoreSw2(config-if-range)#switchport trunk encapsulation d
+CoreSw2(config-if-range)#switchport trunk encapsulation dot1q 
+CoreSw2(config-if-range)#swi
+CoreSw2(config-if-range)#switchport mdo
+CoreSw2(config-if-range)#switchport m
+CoreSw2(config-if-range)#switchport mode tr
+CoreSw2(config-if-range)#switchport mode trunk 
+
+
+CoreSw2#show interfaces tr
+CoreSw2#show interfaces trunk 
+Port        Mode         Encapsulation  Status        Native vlan
+Fa0/2       on           802.1q         trunking      1
+Fa0/3       on           802.1q         trunking      1
+Fa0/4       on           802.1q         trunking      1
+Fa0/5       on           802.1q         trunking      1
+Fa0/21      on           802.1q         trunking      1
+Fa0/22      on           802.1q         trunking      1
+Fa0/23      on           802.1q         trunking      1
+Fa0/24      on           802.1q         trunking      1
+
+Port        Vlans allowed on trunk
+Fa0/2       1-1005
+Fa0/3       1-1005
+Fa0/4       1-1005
+Fa0/5       1-1005
+Fa0/21      1-1005
+Fa0/22      1-1005
+Fa0/23      1-1005
+Fa0/24      1-1005
+
+
+
+
+Switch>en
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#hos
+Switch(config)#hostname AccSw0
+AccSw0(config)#int range f0/1-2
+AccSw0(config-if-range)#swit
+AccSw0(config-if-range)#switchport mode tr
+AccSw0(config-if-range)#switchport mode trunk 
+AccSw0(config-if-range)#
+
+Switch>en
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#hos
+Switch(config)#hostname AccSw1
+AccSw1(config)#int range f0/2-3
+AccSw1(config-if-range)#swi
+AccSw1(config-if-range)#switchport mode
+AccSw1(config-if-range)#switchport mode tr
+AccSw1(config-if-range)#switchport mode trunk 
+AccSw1(config-if-range)#
+
+Switch>en
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#host
+Switch(config)#hostname AccSw2
+AccSw2(config)#int range f0/3-4
+AccSw2(config-if-range)#swi
+AccSw2(config-if-range)#switchport mod
+AccSw2(config-if-range)#switchport mode tr
+AccSw2(config-if-range)#switchport mode trunk 
+AccSw2(config-if-range)#
+
+Switch>en
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#hos
+Switch(config)#hostname AccSw3
+AccSw3(config)#int range f0/4-5
+AccSw3(config-if-range)#siw
+AccSw3(config-if-range)#sw
+AccSw3(config-if-range)#switchport mod
+AccSw3(config-if-range)#switchport mode tr
+AccSw3(config-if-range)#switchport mode trunk 
+AccSw3(config-if-range)#
+
+AccSw3#wr
+Building configuration...
+[OK]
+AccSw3#
+
+
+AccSw3#show vlan
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa0/1, Fa0/2, Fa0/3, Fa0/6
+                                                Fa0/7, Fa0/8, Fa0/9, Fa0/10
+                                                Fa0/11, Fa0/12, Fa0/13, Fa0/14
+                                                Fa0/15, Fa0/16, Fa0/17, Fa0/18
+                                                Fa0/19, Fa0/20, Fa0/21, Fa0/22
+                                                Fa0/23, Fa0/24, Gig0/1, Gig0/2
+10   Sevimaserver                     active    
+20   IT                               active    
+30   HR                               active    
+40   pemasaran                        active    
+1002 fddi-default                     active    
+1003 token-ring-default               active    
+1004 fddinet-default                  active    
+1005 trnet-default                    active    
+
+VLAN Type  SAID       MTU   Parent RingNo BridgeNo Stp  BrdgMode Trans1 Trans2
+---- ----- ---------- ----- ------ ------ -------- ---- -------- ------ ------
+1    enet  100001     1500  -      -      -        -    -        0      0
+10   enet  100010     1500  -      -      -        -    -        0      0
+20   enet  100020     1500  -      -      -        -    -        0      0
+
+AccSw3#show ine
+AccSw3#show in
+AccSw3#show interfaces tr
+AccSw3#show interfaces trunk 
+Port        Mode         Encapsulation  Status        Native vlan
+Fa0/4       on           802.1q         trunking      1
+Fa0/5       on           802.1q         trunking      1
+
+Port        Vlans allowed on trunk
+Fa0/4       1-1005
+Fa0/5       1-1005
+
+Port        Vlans allowed and active in management domain
+Fa0/4       1,10,20,30,40
+Fa0/5       1,10,20,30,40
+
+Port        Vlans in spanning tree forwarding state and not pruned
+Fa0/4       1,10,20,30,40
+Fa0/5       none
+
+AccSw3#
+
+AccSw2#show vlan
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa0/1, Fa0/2, Fa0/5, Fa0/6
+                                                Fa0/7, Fa0/8, Fa0/9, Fa0/10
+                                                Fa0/11, Fa0/12, Fa0/13, Fa0/14
+                                                Fa0/15, Fa0/16, Fa0/17, Fa0/18
+                                                Fa0/19, Fa0/20, Fa0/21, Fa0/22
+                                                Fa0/23, Fa0/24, Gig0/1, Gig0/2
+10   Sevimaserver                     active    
+20   IT                               active    
+30   HR                               active    
+40   pemasaran                        active    
+1002 fddi-default                     active    
+1003 token-ring-default               active    
+1004 fddinet-default                  active    
+1005 trnet-default                    active    
+
+VLAN Type  SAID       MTU   Parent RingNo BridgeNo Stp  BrdgMode Trans1 Trans2
+---- ----- ---------- ----- ------ ------ -------- ---- -------- ------ ------
+1    enet  100001     1500  -      -      -        -    -        0      0
+10   enet  100010     1500  -      -      -        -    -        0      0
+
+AccSw2#show in
+AccSw2#show interfaces t
+AccSw2#show interfaces trunk 
+Port        Mode         Encapsulation  Status        Native vlan
+Fa0/3       on           802.1q         trunking      1
+Fa0/4       on           802.1q         trunking      1
+
+Port        Vlans allowed on trunk
+Fa0/3       1-1005
+Fa0/4       1-1005
+
+Port        Vlans allowed and active in management domain
+Fa0/3       1,10,20,30,40
+Fa0/4       1,10,20,30,40
+
+Port        Vlans in spanning tree forwarding state and not pruned
+Fa0/3       1,10,20,30,40
+Fa0/4       none
+
+AccSw2#
+
+AccSw1#show vlan
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa0/1, Fa0/4, Fa0/5, Fa0/6
+                                                Fa0/7, Fa0/8, Fa0/9, Fa0/10
+                                                Fa0/11, Fa0/12, Fa0/13, Fa0/14
+                                                Fa0/15, Fa0/16, Fa0/17, Fa0/18
+                                                Fa0/19, Fa0/20, Fa0/21, Fa0/22
+                                                Fa0/23, Fa0/24, Gig0/1, Gig0/2
+10   Sevimaserver                     active    
+20   IT                               active    
+30   HR                               active    
+40   pemasaran                        active    
+1002 fddi-default                     active    
+1003 token-ring-default               active    
+1004 fddinet-default                  active    
+1005 trnet-default                    active    
+
+VLAN Type  SAID       MTU   Parent RingNo BridgeNo Stp  BrdgMode Trans1 Trans2
+---- ----- ---------- ----- ------ ------ -------- ---- -------- ------ ------
+1    enet  100001     1500  -      -      -        -    -        0      0
+10   enet  100010     1500  -      -      -        -    -        0      0
+
+AccSw1#show in
+AccSw1#show interfaces tr
+AccSw1#show interfaces trunk 
+Port        Mode         Encapsulation  Status        Native vlan
+Fa0/2       on           802.1q         trunking      1
+Fa0/3       on           802.1q         trunking      1
+
+Port        Vlans allowed on trunk
+Fa0/2       1-1005
+Fa0/3       1-1005
+
+Port        Vlans allowed and active in management domain
+Fa0/2       1,10,20,30,40
+Fa0/3       1,10,20,30,40
+
+Port        Vlans in spanning tree forwarding state and not pruned
+Fa0/2       1,10,20,30,40
+Fa0/3       1,10,20,30,40
+
+AccSw1#
+
+AccSw0#show vlan 
+AccSw0#show vlan 
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa0/3, Fa0/4, Fa0/5, Fa0/6
+                                                Fa0/7, Fa0/8, Fa0/9, Fa0/10
+                                                Fa0/11, Fa0/12, Fa0/13, Fa0/14
+                                                Fa0/15, Fa0/16, Fa0/17, Fa0/18
+                                                Fa0/19, Fa0/20, Fa0/21, Fa0/22
+                                                Fa0/23, Fa0/24, Gig0/1, Gig0/2
+10   Sevimaserver                     active    
+20   IT                               active    
+30   HR                               active    
+40   pemasaran                        active    
+1002 fddi-default                     active    
+1003 token-ring-default               active    
+1004 fddinet-default                  active    
+1005 trnet-default                    active    
+
+VLAN Type  SAID       MTU   Parent RingNo BridgeNo Stp  BrdgMode Trans1 Trans2
+---- ----- ---------- ----- ------ ------ -------- ---- -------- ------ ------
+1    enet  100001     1500  -      -      -        -    -        0      0
+10   enet  100010     1500  -      -      -        -    -        0      0
+
+AccSw0#show in
+AccSw0#show interfaces t
+AccSw0#show interfaces trunk 
+Port        Mode         Encapsulation  Status        Native vlan
+Fa0/1       on           802.1q         trunking      1
+Fa0/2       on           802.1q         trunking      1
+
+Port        Vlans allowed on trunk
+Fa0/1       1-1005
+Fa0/2       1-1005
+
+Port        Vlans allowed and active in management domain
+Fa0/1       1,10,20,30,40
+Fa0/2       1,10,20,30,40
+
+Port        Vlans in spanning tree forwarding state and not pruned
+Fa0/1       1,10,20,30,40
+Fa0/2       none
+
+AccSw0#
+
+
+
+AccSw0#
+AccSw0#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+AccSw0(config)#int range f0/3-5
+AccSw0(config-if-range)#sw
+AccSw0(config-if-range)#switchport mode acc
+AccSw0(config-if-range)#switchport mode access 
+AccSw0(config-if-range)#swi
+AccSw0(config-if-range)#switchport acc
+AccSw0(config-if-range)#switchport access vlan 10
+AccSw0(config-if-range)#
+
+AccSw1(config-if-range)#ex
+AccSw1(config)#int f0/1
+AccSw1(config-if)#swi
+AccSw1(config-if)#switchport mode
+AccSw1(config-if)#switchport mode acc
+AccSw1(config-if)#switchport mode access 
+AccSw1(config-if)#swit
+AccSw1(config-if)#switchport acc
+AccSw1(config-if)#switchport access vla
+AccSw1(config-if)#switchport access vlan 20
+AccSw1(config-if)#
+
+AccSw2#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+AccSw2(config)#int f0/2
+AccSw2(config-if)#sw
+AccSw2(config-if)#switchport mdo
+AccSw2(config-if)#switchport m
+AccSw2(config-if)#switchport mode acc
+AccSw2(config-if)#switchport mode access 
+AccSw2(config-if)#swi
+AccSw2(config-if)#switchport acces
+AccSw2(config-if)#switchport access vla
+AccSw2(config-if)#switchport access vlan 30
+AccSw2(config-if)#
+
+AccSw3>en
+AccSw3#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+AccSw3(config)#int f0/1
+AccSw3(config-if)#swi
+AccSw3(config-if)#switchport mdo
+AccSw3(config-if)#switchport mod
+AccSw3(config-if)#switchport mode acc
+AccSw3(config-if)#swi
+AccSw3(config-if)#switchport acc
+AccSw3(config-if)#switchport access vlan 40
+AccSw3(config-if)#switchport access vlan 40
+AccSw3(config-if)#
+
+AccSw0#show vlan 
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa0/6, Fa0/7, Fa0/8, Fa0/9
+                                                Fa0/10, Fa0/11, Fa0/12, Fa0/13
+                                                Fa0/14, Fa0/15, Fa0/16, Fa0/17
+                                                Fa0/18, Fa0/19, Fa0/20, Fa0/21
+                                                Fa0/22, Fa0/23, Fa0/24, Gig0/1
+                                                Gig0/2
+10   Sevimaserver                     active    Fa0/3, Fa0/4, Fa0/5
+
+
+
+
+ccSw1#show vlan
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa0/4, Fa0/5, Fa0/6, Fa0/7
+                                                Fa0/8, Fa0/9, Fa0/10, Fa0/11
+                                                Fa0/12, Fa0/13, Fa0/14, Fa0/15
+                                                Fa0/16, Fa0/17, Fa0/18, Fa0/19
+                                                Fa0/20, Fa0/21, Fa0/22, Fa0/23
+                                                Fa0/24, Gig0/1, Gig0/2
+10   Sevimaserver                     active    
+20   IT                               active    Fa0/1
+
+
+
+ccSw2#show vlan
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa0/1, Fa0/5, Fa0/6, Fa0/7
+                                                Fa0/8, Fa0/9, Fa0/10, Fa0/11
+                                                Fa0/12, Fa0/13, Fa0/14, Fa0/15
+                                                Fa0/16, Fa0/17, Fa0/18, Fa0/19
+                                                Fa0/20, Fa0/21, Fa0/22, Fa0/23
+                                                Fa0/24, Gig0/1, Gig0/2
+10   Sevimaserver                     active    
+20   IT                               active    
+30   HR                               active    Fa0/2
+
+
+
+AccSw3#show vlan
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa0/2, Fa0/3, Fa0/6, Fa0/7
+                                                Fa0/8, Fa0/9, Fa0/10, Fa0/11
+                                                Fa0/12, Fa0/13, Fa0/14, Fa0/15
+                                                Fa0/16, Fa0/17, Fa0/18, Fa0/19
+                                                Fa0/20, Fa0/21, Fa0/22, Fa0/23
+                                                Fa0/24, Gig0/1, Gig0/2
+10   Sevimaserver                     active    
+20   IT                               active    
+30   HR                               active    
+40   pemasaran                        active    Fa0/1
+
+
+CoreSw1>en
+CoreSw1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+CoreSw1(config)#int vlan 10
+CoreSw1(config-if)#
+%LINK-5-CHANGED: Interface Vlan10, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan10, changed state to up
+
+CoreSw1(config-if)#ip add
+CoreSw1(config-if)#ip address 192.168.10.1 255.255.255.0
+CoreSw1(config-if)#no sh
+CoreSw1(config-if)#no shutdown 
+CoreSw1(config-if)#exit
+CoreSw1(config)#int vlan 20
+CoreSw1(config-if)#
+%LINK-5-CHANGED: Interface Vlan20, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan20, changed state to up
+
+CoreSw1(config-if)#ip ad
+CoreSw1(config-if)#ip address 192.168.20.1 255.255.255.0
+CoreSw1(config-if)#no sh
+CoreSw1(config-if)#exi
+CoreSw1(config-if)#exit 
+CoreSw1(config)#int vl
+CoreSw1(config)#int vlan 30
+CoreSw1(config-if)#
+%LINK-5-CHANGED: Interface Vlan30, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan30, changed state to up
+
+CoreSw1(config-if)#ip add
+% Incomplete command.
+CoreSw1(config-if)#ip add
+CoreSw1(config-if)#ip address 
+% Incomplete command.
+CoreSw1(config-if)#ip address 192.168.30.1 255.255.255.0
+CoreSw1(config-if)#no sh
+CoreSw1(config-if)#ex
+CoreSw1(config)#int vl
+CoreSw1(config)#int vlan 40
+CoreSw1(config-if)#
+%LINK-5-CHANGED: Interface Vlan40, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan40, changed state to up
+
+CoreSw1(config-if)#ip add
+CoreSw1(config-if)#ip address 192.168.40.1 255.255.255.0
+CoreSw1(config-if)#no sh
+CoreSw1(config-if)#ex
+CoreSw1(config)#
+CoreSw1(config)#ip routing
+CoreSw1(config)#
+
+
+
+CoreSw2>en
+CoreSw2#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+CoreSw2(config)#int vlan 10
+CoreSw2(config-if)#
+%LINK-5-CHANGED: Interface Vlan10, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan10, changed state to up
+
+CoreSw2(config-if)#ip add
+CoreSw2(config-if)#ip address 192.168.10.2 255.255.255.0
+CoreSw2(config-if)#no sh
+CoreSw2(config-if)#ex
+CoreSw2(config)#int vl
+CoreSw2(config)#int vlan 20
+CoreSw2(config-if)#
+%LINK-5-CHANGED: Interface Vlan20, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan20, changed state to up
+
+CoreSw2(config-if)#ip add
+CoreSw2(config-if)#ip address 192.168.20.2 255.255.255.0
+CoreSw2(config-if)#no sh
+CoreSw2(config-if)#ex
+CoreSw2(config)#int vlan 30
+CoreSw2(config-if)#
+%LINK-5-CHANGED: Interface Vlan30, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan30, changed state to up
+
+CoreSw2(config-if)#ip add 192.168.30.2 255.255.255.0
+CoreSw2(config-if)#no sh
+CoreSw2(config-if)#ex
+CoreSw2(config)#int vlan 40 
+CoreSw2(config-if)#
+%LINK-5-CHANGED: Interface Vlan40, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan40, changed state to up
+
+CoreSw2(config-if)#ip add 192.168.40.2 255.255.255.0
+CoreSw2(config-if)#no sh
+CoreSw2(config-if)#ex
+CoreSw2(config)#end
+CoreSw2#
+
+
+#Konfigurasi STP
+CoreSw1#
+CoreSw1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+CoreSw1(config)#sp
+CoreSw1(config)#spanning-tree vl
+CoreSw1(config)#spanning-tree vlan 10,20 root
+CoreSw1(config)#spanning-tree vlan 10,20 root 
+CoreSw1(config)#spanning-tree vlan 10,20 root pr
+CoreSw1(config)#spanning-tree vlan 10,20 root primary 
+CoreSw1(config)#
+
+CoreSw2#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+CoreSw2(config)#sp
+CoreSw2(config)#spanning-tree vlan 30,40 root
+CoreSw2(config)#spanning-tree vlan 30,40 root pr
+CoreSw2(config)#spanning-tree vlan 30,40 root primary 
+CoreSw2(config)#
+
+#konfigurasi etherchannel
+CoreSw1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+CoreSw1(config)#int range
+CoreSw1(config)#int range f0/21-24
+CoreSw1(config-if-range)#channel-group 1 mode
+CoreSw1(config-if-range)#channel-group 1 mode on
+CoreSw1(config-if-range)#
+CoreSw1#show etherchannel summary 
+Flags:  D - down        P - in port-channel
+        I - stand-alone s - suspended
+        H - Hot-standby (LACP only)
+        R - Layer3      S - Layer2
+        U - in use      f - failed to allocate aggregator
+        u - unsuitable for bundling
+        w - waiting to be aggregated
+        d - default port
+
+
+Number of channel-groups in use: 1
+Number of aggregators:           1
+
+Group  Port-channel  Protocol    Ports
+------+-------------+-----------+----------------------------------------------
+
+1      Po1(SU)           -      Fa0/21(P) Fa0/22(P) Fa0/23(P) Fa0/24(P) 
+
+
+
+
+oreSw2#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+CoreSw2(config)#int range f0/21-24
+CoreSw2(config-if-range)#channel-group 1 mode on
+CoreSw2(config-if-range)#
+Creating a port-channel interface Port-channel 1
+
+%LINK-5-CHANGED: Interface Port-channel1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Port-channel1, changed state to up
+
+CoreSw2(config-if-range)#end
+CoreSw2#
+%SYS-5-CONFIG_I: Configured from console by console
+
+CoreSw2#show et
+CoreSw2#show etherchannel sum
+CoreSw2#show etherchannel summary 
+Flags:  D - down        P - in port-channel
+        I - stand-alone s - suspended
+        H - Hot-standby (LACP only)
+        R - Layer3      S - Layer2
+        U - in use      f - failed to allocate aggregator
+        u - unsuitable for bundling
+        w - waiting to be aggregated
+        d - default port
+
+
+Number of channel-groups in use: 1
+Number of aggregators:           1
+
+Group  Port-channel  Protocol    Ports
+------+-------------+-----------+----------------------------------------------
+
+1      Po1(SU)           -      Fa0/21(P) Fa0/22(P) Fa0/23(P) Fa0/24(P) 
+CoreSw2#
+
+
+#konfigurasi HSRP
+CoreSw1#
+CoreSw1#
+CoreSw1#
+CoreSw1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+CoreSw1(config)#int vlan 10
+CoreSw1(config-if)#stand
+CoreSw1(config-if)#standby 1 ip 192.168.10.254
+CoreSw1(config-if)#stan
+CoreSw1(config-if)#standby 1 pr
+CoreSw1(config-if)#standby 1 pr
+CoreSw1(config-if)#standby 1 prio
+CoreSw1(config-if)#standby 1 priority 200
+CoreSw1(config-if)#stan
+CoreSw1(config-if)#standby pree
+CoreSw1(config-if)#standby preempt 
+CoreSw1(config-if)#
+%HSRP-6-STATECHANGE: Vlan10 Grp 1 state Speak -> Standby
+
+%HSRP-6-STATECHANGE: Vlan10 Grp 1 state Standby -> Active
+
+CoreSw1(config-if)#ex
+CoreSw1(config)#int vlan 20
+CoreSw1(config-if)#standby 1 ip 192.168.20.254
+CoreSw1(config-if)#stan
+CoreSw1(config-if)#standby 1 prio
+CoreSw1(config-if)#standby 1 priority 
+% Incomplete command.
+CoreSw1(config-if)#standby 1 priority 2
+%HSRP-6-STATECHANGE: Vlan20 Grp 1 state Speak -> Standby
+0
+%HSRP-6-STATECHANGE: Vlan20 Grp 1 sta
+CoreSw1(config-if)#standby 1 priority 200
+CoreSw1(config-if)#st
+CoreSw1(config-if)#standby 1 pre
+CoreSw1(config-if)#standby 1 preempt 
+CoreSw1(config-if)#ex
+CoreSw1(config)#int vlan 30
+CoreSw1(config-if)#st
+CoreSw1(config-if)#standby 1 ip 192.168.30.254
+CoreSw1(config-if)#st
+CoreSw1(config-if)#standby 1 pri
+CoreSw1(config-if)#standby 1 priority 200
+%HSRP-6-STATECHANGE: Vlan30 Grp 1 state Speak -> Standby
+
+%HSRP-6-STATECHANGE: Vlan30 Grp 1 state Standby -> Active
+
+CoreSw1(config-if)#standby 1 priority 150
+CoreSw1(config-if)#st
+CoreSw1(config-if)#standby 1 pr
+CoreSw1(config-if)#standby 1 pre
+CoreSw1(config-if)#standby 1 preempt 
+CoreSw1(config-if)#ex
+CoreSw1(config)#int vl
+CoreSw1(config)#int vlan 40
+CoreSw1(config-if)#standby 1 ip 192.168.40.254
+CoreSw1(config-if)#stan
+CoreSw1(config-if)#standby 1 prt
+CoreSw1(config-if)#standby 1 pr
+CoreSw1(config-if)#standby 1 prio
+CoreSw1(config-if)#standby 1 priority 150
+%HSRP-6-STATECHANGE: Vlan40 Grp 1 state Speak -> Standby
+
+%HSRP-6-STATECHANGE: Vlan40 Grp 1 state Standby -> Active
+
+CoreSw1(config-if)#standby 1 priority 150
+CoreSw1(config-if)#standby 1 pree
+CoreSw1(config-if)#standby 1 preempt 
+CoreSw1(config-if)#ex
+CoreSw1(config)#
+
+
+
+
+CoreSw2>
+CoreSw2>en
+CoreSw2#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+CoreSw2(config)#int vlan 10
+CoreSw2(config-if)#stan
+CoreSw2(config-if)#standby 1 ip 192.168.10.254
+CoreSw2(config-if)#st
+CoreSw2(config-if)#standby 1 pr
+CoreSw2(config-if)#standby 1 prior
+CoreSw2(config-if)#standby 1 priority 150
+%HSRP-6-STATECHANGE: Vlan10 Grp 1 state Speak -> Standby
+
+CoreSw2(config-if)#standby 1 priority 150
+CoreSw2(config-if)#standby 1 pree
+CoreSw2(config-if)#standby 1 preempt 
+CoreSw2(config-if)#ex
+CoreSw2(config)#int vlan 20
+CoreSw2(config-if)#stan
+CoreSw2(config-if)#standby 1 ip 192.168.20.254
+CoreSw2(config-if)#stand
+CoreSw2(config-if)#standby 1 prio
+CoreSw2(config-if)#standby 1 priority 150
+CoreSw2(config-if)#stan
+CoreSw2(config-if)#standby 1 pree
+CoreSw2(config-if)#standby 1 preempt 
+CoreSw2(config-if)#ex
+CoreSw2(config)#
+%HSRP-6-STATECHANGE: Vlan20 Grp 1 state Speak -> Standby
+
+CoreSw2(config)#int vlan 30
+CoreSw2(config-if)#stanb
+CoreSw2(config-if)#stanby
+CoreSw2(config-if)#stan
+CoreSw2(config-if)#standby 1 ip 192.168.30.254
+CoreSw2(config-if)#standby 1 prio
+CoreSw2(config-if)#standby 1 priority 200
+CoreSw2(config-if)#standby
+CoreSw2(config-if)#standby 1 pree
+CoreSw2(config-if)#standby 1 preempt 
+CoreSw2(config-if)#
+ %HSRP-6-STATECHANGE: Vlan30 Grp 1 state Standby -> Active
+
+CoreSw2(config-if)#ex
+CoreSw2(config)#conf t
+                 ^
+% Invalid input detected at '^' marker.
+	
+CoreSw2(config)#int vlan 40
+CoreSw2(config-if)#standby 1 ip 192.168.40.254
+CoreSw2(config-if)#stanby 1 prip
+CoreSw2(config-if)#stanby 1 pri
+CoreSw2(config-if)#stanby 1 prio
+CoreSw2(config-if)#stanby 1 prior
+CoreSw2(config-if)#stanby 1 prior
+%HSRP-6-STATECHANGE: Vlan40 Grp 1 state Speak -> Standby
+
+                       ^
+% Invalid input detected at '^' marker.
+	
+CoreSw2(config-if)#stanby 1 prior
+CoreSw2(config-if)#stanby 1 prio
+CoreSw2(config-if)#standby 1 priority 200
+CoreSw2(config-if)#standby 1 pree
+CoreSw2(config-if)#standby 1 preempt 
+CoreSw2(config-if)#ex
+CoreSw2(config)#
+ %HSRP-6-STATECHANGE: Vlan40 Grp 1 state Standby -> Active
+
+CoreSw2(config)#
+
+CoreSw2#show standby  brief 
+                     P indicates configured to preempt.
+                     |
+Interface   Grp  Pri P State    Active          Standby         Virtual IP
+Vl10        1    150 P Standby  192.168.10.1    local           192.168.10.254 
+Vl20        1    150 P Standby  192.168.20.1    local           192.168.20.254 
+Vl30        1    200 P Active   local           192.168.30.1    192.168.30.254 
+Vl40        1    200 P Active   local           192.168.40.1    192.168.40.254 
+
+
+
+CoreSw1#show standby brief 
+                     P indicates configured to preempt.
+                     |
+Interface   Grp  Pri P State    Active          Standby         Virtual IP
+Vl10        1    200   Active   local           192.168.10.2    192.168.10.254 
+Vl20        1    200 P Active   local           192.168.20.2    192.168.20.254 
+Vl30        1    150 P Standby  192.168.30.2    local           192.168.30.254 
+Vl40        1    150 P Standby  192.168.40.2    local           192.168.40.254
+
+
+
+#setting ip
+ CoreSw1>en
+CoreSw1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+CoreSw1(config)#int f0/20
+CoreSw1(config-if)#no sw
+CoreSw1(config-if)#no switchport 
+CoreSw1(config-if)#ip add 1.1.1.2 255.255.255.0
+CoreSw1(config-if)#no sh
+CoreSw1(config-if)#no ip add
+CoreSw1(config-if)#no ip address 
+CoreSw1(config-if)#end
+CoreSw1#
+%SYS-5-CONFIG_I: Configured from console by console
+
+CoreSw1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+CoreSw1(config)#int g0/1
+CoreSw1(config-if)#no swi
+CoreSw1(config-if)#no switchport 
+CoreSw1(config-if)#ip add
+CoreSw1(config-if)#ip address 1.1.1.2 255.255.255.0
+CoreSw1(config-if)#no sh
+CoreSw1(config-if)#ex
+CoreSw1(config)#int f0/20
+CoreSw1(config-if)#no sw
+CoreSw1(config-if)#no switchport 
+CoreSw1(config-if)#ip address 3.3.3.1 255.255.255.0
+CoreSw1(config-if)#no sh
+CoreSw1(config-if)#ex
+CoreSw1(config)#
+
+
+Router>EN
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#hos
+Router(config)#hostname R1
+R1(config)#int g0/0
+R1(config-if)#ip add
+R1(config-if)#ip address 1.1.1.1 255.255.255.0
+R1(config-if)#no sh
+
+R1(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0, changed state to up
+
+R1(config-if)#int s0/0/0
+R1(config-if)#ex
+R1(config)#int s0/0/0
+R1(config-if)#ip add 5.5.5.2 255.255.255.0
+R1(config-if)#no sh
+
+%LINK-5-CHANGED: Interface Serial0/0/0, changed state to down
+R1(config-if)#ex
+R1(config)#int g0/1
+R1(config-if)#ip add 4.4.4.1 255.255.255.0
+R1(config-if)#no sh
+
+
+R1#show ip interface brief 
+Interface              IP-Address      OK? Method Status                Protocol 
+GigabitEthernet0/0     1.1.1.1         YES manual up                    up 
+GigabitEthernet0/1     4.4.4.1         YES manual up                    up 
+Serial0/0/0            5.5.5.2         YES manual down                  down 
+
+
+
+ISP#show ip interface brief 
+Interface              IP-Address      OK? Method Status                Protocol 
+GigabitEthernet0/0     10.10.10.1      YES manual up                    up 
+GigabitEthernet0/1     unassigned      YES unset  administratively down down 
+Serial0/0/0            5.5.5.1         YES manual up                    up 
+Serial0/0/1            6.6.6.1         YES manual up                    up 
+Vlan1                  unassigned      YES unset  administratively down down
+
+R2#show ip interface  brief 
+Interface              IP-Address      OK? Method Status                Protocol 
+GigabitEthernet0/0     2.2.2.1         YES manual up                    up 
+GigabitEthernet0/1     3.3.3.2         YES manual up                    up 
+Serial0/0/0            6.6.6.2         YES manual up                    up 
+Serial0/0/1            unassigned      YES unset  administratively down down 
+Vlan1                  unassigned      YES unset  administratively down down
+R2#
+
+#konfigurasi OSPF
+CoreSw1>en
+CoreSw1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+CoreSw1(config)#router ospf 1
+CoreSw1(config-router)#network 1.1.1.0 0.0.0.255 area 0
+CoreSw1(config-router)#netw
+CoreSw1(config-router)#network 3.3.3.0 0.0.0.255 area 0
+CoreSw1(config-router)#net
+CoreSw1(config-router)#network 192.168.10.0 0.0.0.255 area 0
+CoreSw1(config-router)#network 192.168.20.0 0.0.0.255 area 0
+CoreSw1(config-router)#network 192.168.30.0 0.0.0.255 area 0
+CoreSw1(config-router)#network 192.168.40.0 0.0.0.255 area 0
+CoreSw1(config-router)#
+
+CoreSw2>en
+CoreSw2#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+CoreSw2(config)#rout
+CoreSw2(config)#router ospf 1 
+CoreSw2(config-router)#net
+CoreSw2(config-router)#network 4.4.4.0 0.0.0.255
+% Incomplete command.
+CoreSw2(config-router)#network 4.4.4.0 0.0.0.255 area 0
+CoreSw2(config-router)#netw
+CoreSw2(config-router)#network 2.2.2.0 0.0.0.255 area 0
+CoreSw2(config-router)#network 192.168.10.0 0.0.0.255 area 0
+CoreSw2(config-router)#network 192.168.20.0 0.0.0.255 area 0
+CoreSw2(config-router)#network 192.168.30.0 0.0.0.255 area 0
+03:49:21: %OSPF-5-ADJCHG: Process 1, Nbr 192.168.40.1 on Vlan10 from LOADING to FULL, Loading Done
+
+CoreSw2(config-router)#network 192.168.30.0 0.0.0.255 area 0
+CoreSw2(config-router)#network 192.168.30.0 0.0.0.255 area 0
+03:49:26: %OSPF-5-ADJCHG: Process 1, Nbr 192.168.40.1 on Vlan2
+03:49:30: %OSPF-5-ADJCHG: Process 1, Nbr 192.168.40.1 on Vlan30 from LOADING to FULL, Loading Done
+network 192.168.40.0 0.0.0.255 area 0
+CoreSw2(config-router)#network 192.168.40.0 0.0.0.255 area 0
+CoreSw2(config-router)#
+03:49:43: %OSPF-5-ADJCHG: Process 1, Nbr 192.168.40.1 on Vlan40 from LOADING to FULL, Loading Done
+
+CoreSw2(config-router)#
+
+R1>en
+R1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+R1(config)#router ospf 1
+R1(config-router)#netw
+R1(config-router)#network 1.1.1.0 255.255.255.0 area o
+                                                     ^
+% Invalid input detected at '^' marker.
+	
+R1(config-router)#network 1.1.1.0 255.255.255.0 area 0
+R1(config-router)#network 1..0 255.255.255.0 area 0
+03:23:10: %OSPF-5-ADJCHG: Process 1, Nbr 192.168.40.1 on GigabitEthernet0/0 fr
+R1(config-router)#network 1.1.1.0 0.0.0.255 area o
+                                                 ^
+% Invalid input detected at '^' marker.
+	
+R1(config-router)#network 1.1.1.0 0.0.0.255 area 0
+R1(config-router)#network 5.5.5.0 0.0.0.255 area 0
+R1(config-router)#network 4.4.4.0 0.0.0.255 area 0
+R1(config-router)#
+
+R2>en
+R2#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+R2(config)#routing ospf 1
+               ^
+% Invalid input detected at '^' marker.
+	
+R2(config)#router ospf 1
+R2(config-router)#netwo
+R2(config-router)#network 3.3.3.0 0.0.0.255 area 0
+R2(config-router)#network 2.2.2.0 0.0.0.255 area 0
+R2(config-router)#network 6.6.6.0 0.0.0.255 area 0
+R2(config-router)#
+03:25:20: %OSPF-5-ADJCHG: Process 1, Nbr 192.168.40.1 on GigabitEthernet0/1 from LOADING to FULL, Loading Done
+
+03:25:20: %OSPF-5-ADJCHG: Process 1, Nbr 192.168.40.2 on GigabitEthernet0/0 from LOADING to FULL, Loading Done
+
+R2(config-router)#
+
+ISP>en
+ISP#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+ISP(config)#router ospf 1
+ISP(config-router)#netw
+ISP(config-router)#network 5.5.5.0 0.0.0.255 area 0
+ISP(config-router)#network 6.6.6.0 0.0.0.255 area 0
+03:26:14: %OSPF-5-ADJCHG: Process 1, Nbr 5.5.5.2 on Serial0/0/0 from LOADING to FULL, Loading Done
+
+ISP(config-router)#network 6.6.6.0 0.0.0.255 area 0
+ISP(config-router)#network 10.0 0.0.0.255 area 0
+03:26:19: %OSPF-5-ADJCHG: Process 1, Nbr 6.6.6.2 on Serial0/0/1 from Lnetwork 5.5.5.0 0.0.0.255 area 0
+ISP(config-router)#network 10.10.10.0 0.0.0.255 area 0
+ISP(config-router)#
+
+R1(config-router)#ex
+R1(config)#ip route 0.0.0.0 0.0.0.0 5.5.5.1
+R1(config)#

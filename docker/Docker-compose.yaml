@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  go-app1:
+    container_name: go1
+    image: go:latest
+    networks:
+      - go-networks
+    ports:
+      - "3000:3000"
+
+  go-app2:
+    container_name: go2
+    image: go2:latest
+    networks:
+      - go-networks
+    ports:
+      - "3001:3001"
+
+networks:
+  go-networks:
+    name: go-networks
