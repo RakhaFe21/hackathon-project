@@ -16,6 +16,9 @@ services:
       - go-networks
     ports:
       - "3001:3001"
+    depends_on:
+      - go-app1
+
 
 networks:
   go-networks:
